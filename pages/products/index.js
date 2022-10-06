@@ -1,8 +1,17 @@
 import Head from "next/head";
 import Link from "next/link";
 import GridList from "../../components/GridList";
+import { getAllProducts } from "../../services/productService";
 
-export default function Products() {
+export async function getServerSideProps() {
+  const products = await getAllProducts();
+
+  return {
+    props: { products: products },
+  };
+}
+
+export default function Products({ products }) {
   return (
     <>
       <Head>
@@ -11,12 +20,11 @@ export default function Products() {
       <h1>Produkte</h1>
       <p>Liste aller Produkte</p>
       <GridList>
-        <li>
-          <Link href="/products/1">Guppy</Link>
-        </li>
-        <li>
-          <Link href="/products/2">Regenbogenfisch</Link>
-        </li>
+        {products.map((product) => (
+          <li key={product.id}>
+            <Link href={`/products/${product.id}`}>{product.name}</Link>
+          </li>
+        ))}
       </GridList>
     </>
   );
