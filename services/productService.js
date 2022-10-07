@@ -1,66 +1,34 @@
-const products = [
-  {
-    id: "1",
-    name: "Garnele",
-    description:
-      "Lebt bevorzugt paarweise. Lorem ipsum dolor sit, amet consectetur adipisicing elit. Rerum quaerat ea sint ipsum nisi recusandae corrupti ab possimus eveniet voluptate eaque ullam quas voluptatem omnis quod, natus, non eum assumenda.",
-    price: 19,
-    category: "Wirbellose",
-  },
-  {
-    id: "2",
-    name: "Anemonenfisch",
-    description:
-      "Nemo. Lorem ipsum dolor sit, amet consectetur adipisicing elit. Rerum quaerat ea sint ipsum nisi recusandae corrupti ab possimus eveniet voluptate eaque ullam quas voluptatem omnis quod, natus, non eum assumenda.",
-    price: 60,
-    category: "Meerwasser",
-  },
-  {
-    id: "3",
-    name: "Pracht-Anemone",
-    description:
-      "Ist prächtig. Lorem ipsum dolor sit, amet consectetur adipisicing elit. Rerum quaerat ea sint ipsum nisi recusandae corrupti ab possimus eveniet voluptate eaque ullam quas voluptatem omnis quod, natus, non eum assumenda.",
-    price: 90,
-    category: "Korallen und Blumentiere",
-  },
-  {
-    id: "4",
-    name: "Mördermuschel",
-    description:
-      "Ist hübscher als ihr Name. Lorem ipsum dolor sit, amet consectetur adipisicing elit. Rerum quaerat ea sint ipsum nisi recusandae corrupti ab possimus eveniet voluptate eaque ullam quas voluptatem omnis quod, natus, non eum assumenda.",
-    price: 125,
-    category: "Muscheln",
-  },
-  {
-    id: "5",
-    name: "Kaiserfisch",
-    description:
-      "Ein tagaktiver Einzelgänger. Lorem ipsum dolor sit, amet consectetur adipisicing elit. Rerum quaerat ea sint ipsum nisi recusandae corrupti ab possimus eveniet voluptate eaque ullam quas voluptatem omnis quod, natus, non eum assumenda.",
-    category: "Meerwasser",
-    price: 90,
-  },
-  {
-    id: "6",
-    name: "Guppy",
-    description:
-      "Klein aber fein. Lorem ipsum dolor sit, amet consectetur adipisicing elit. Rerum quaerat ea sint ipsum nisi recusandae corrupti ab possimus eveniet voluptate eaque ullam quas voluptatem omnis quod, natus, non eum assumenda.",
-    price: 5,
-    category: "Süßwasser",
-  },
-  {
-    id: "7",
-    name: "Regenbogenfisch",
-    description:
-      "In allen Farben und bunt. Lorem ipsum dolor sit, amet consectetur adipisicing elit. Rerum quaerat ea sint ipsum nisi recusandae corrupti ab possimus eveniet voluptate eaque ullam quas voluptatem omnis quod, natus, non eum assumenda.",
-    price: 12,
-    category: "Süßwasser",
-  },
-];
+import dbConnect from "../lib/dbConnect";
+import Product from "../models/Product";
 
 export async function getAllProducts() {
-  return products;
+  await dbConnect();
+
+  const products = await Product.find().populate("category");
+
+  const sanitizedProducts = products.map((product) => ({
+    id: product.id,
+    name: product.name,
+    description: product.description,
+    price: product.price,
+    category: product.category.name,
+  }));
+
+  return sanitizedProducts;
 }
 
 export async function getProductById(id) {
-  return products.find((product) => product.id === id);
+  await dbConnect();
+
+  const product = await Product.findById(id).populate("category");
+
+  const sanitizedProduct = {
+    id: product.id,
+    name: product.name,
+    description: product.description,
+    price: product.price,
+    category: product.category.name,
+  };
+
+  return sanitizedProduct;
 }
