@@ -1,5 +1,6 @@
 import Head from "next/head";
 import Link from "next/link";
+import Anchor from "../../components/Anchor";
 import GridList from "../../components/GridList";
 import { getAllProducts } from "../../services/productService";
 
@@ -26,6 +27,9 @@ export default function Products({ products }) {
           </li>
         ))}
       </GridList>
+      <Link href={`/products/create`} passHref>
+        <Anchor>Produkt hinzufügen</Anchor>
+      </Link>
     </>
   );
 }
