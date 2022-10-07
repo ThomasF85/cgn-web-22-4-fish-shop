@@ -5,7 +5,7 @@ export async function getAllCategories() {
   await dbConnect();
 
   const categories = await Category.find();
-
+  
   const sanitizedCategories = categories.map((category) => ({
     id: category.id,
     name: category.name,
