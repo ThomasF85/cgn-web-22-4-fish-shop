@@ -22,7 +22,11 @@ export default function CreateProduct({ categories }) {
         body: JSON.stringify(data),
       });
       const result = await response.json();
-      router.push(`/products/${result.createdId}`);
+      if (result.createdId) {
+        router.push(`/products/${result.createdId}`);
+      } else {
+        alert("Creating a product did not work!!");
+      }
     } catch (error) {
       console.error(error);
     }

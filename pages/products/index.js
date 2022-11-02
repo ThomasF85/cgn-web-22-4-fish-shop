@@ -1,3 +1,4 @@
+import { useSession } from "next-auth/react";
 import Head from "next/head";
 import Link from "next/link";
 import Anchor from "../../components/Anchor";
@@ -13,6 +14,8 @@ export async function getServerSideProps() {
 }
 
 export default function Products({ products }) {
+  const { data: session, status } = useSession();
+
   return (
     <>
       <Head>
@@ -27,9 +30,11 @@ export default function Products({ products }) {
           </li>
         ))}
       </GridList>
-      <Link href={`/products/create`} passHref>
-        <Anchor>Produkt hinzufügen</Anchor>
-      </Link>
+      {session && (
+        <Link href={`/products/create`} passHref>
+          <Anchor>Produkt hinzufügen</Anchor>
+        </Link>
+      )}
     </>
   );
 }
